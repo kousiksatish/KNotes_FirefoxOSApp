@@ -1,0 +1,83 @@
+<html>
+	<head>
+		
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>KNotes</title>
+<!--
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon.png">
+-->
+        <link id="data-uikit-theme" rel="stylesheet" href="css/uikit.docs.min.css">
+        <link rel="stylesheet" href="css/docs.css">
+        <link rel="stylesheet" href="vendor/highlight/highlight.css">
+       
+        <script src="vendor/jquery.js"></script>
+        <script src="dist/js/uikit.min.js"></script>
+        <script src="vendor/highlight/highlight.js"></script>
+        <script src="js/docs.js"></script>
+        
+	<script>
+	
+		
+		function fetch()
+		{
+			var str="";
+			var news;
+			for(i=1;i<=Number(localStorage.count);i++)
+			{
+				
+				var j='news'+i;
+				var k='time'+i;
+				var time = localStorage.getItem(k)
+				
+				if(localStorage.getItem(j)!= null)
+				{
+					news = localStorage.getItem(j);
+					//str += '<div class="uk-grid"><div class="uk-width-2-3">';
+					str += ('<div class="uk-panel uk-panel-box"><div class="uk-grid"><div class="uk-width-4-5"><h3 class="tm-article-subtitle">Note' + i + " " +time + "</h3>");
+					str += '</div><div class="uk-width-1-5">';
+					str += '<form action="form.html"><button class="uk-button uk-button-small" onclick="temp('+ i +')" >Edit</button></div></div></form>';
+					str += news;
+					str += "</div><br>";
+				}
+			}
+			document.getElementById("result").innerHTML = str;
+		}
+		
+		function temp(x)
+		{
+			if(localStorage.count)
+			{
+				if(x==0)
+					localStorage['temp'] = Number(localStorage['count'])+1;
+				else
+					localStorage['temp'] = x;
+			}
+			else
+			{
+				localStorage['temp']=1;
+				localStorage['count']=1;
+			}
+		}
+		
+				
+	
+	</script>
+	</head>
+	<body onload="fetch()">
+	
+	<div class="uk-grid">
+	<div class="uk-width-2-3">
+		<h1 class="uk-article-title">Knotes</h1>
+	</div>
+	<div class="uk-width-1-3">
+		<form action="form.html">
+		<button type="submit" class="uk-button uk-button-large uk-text-right" onclick="temp(0)">+Add</button>
+		</form>
+	</div>
+	</div>
+	<div id="result"></div>
+	
+	</body>
+</html>

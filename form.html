@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+
+    <head>
+		
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>KNotes</title>
+<!--
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon.png">
+-->
+        <link id="data-uikit-theme" rel="stylesheet" href="css/uikit.docs.min.css">
+        <link rel="stylesheet" href="css/docs.css">
+        <link rel="stylesheet" href="vendor/highlight/highlight.css">
+       
+        <script src="vendor/jquery.js"></script>
+        <script src="dist/js/uikit.min.js"></script>
+        <script src="vendor/highlight/highlight.js"></script>
+        <script src="js/docs.js"></script>
+        <script src="dist/js/addons/sticky.js"></script>
+      
+      <style>
+      textarea#note
+      {
+		  width : 100%;
+		  font: 22px Tahoma, cursive;
+		  color : black;
+		  height : 100%;
+		  background : lightgreen;
+	  }
+      
+      </style>
+      
+      <script>
+		  
+		  function add()
+		  {
+			var textarea = document.getElementById("note");
+			var x = textarea.value;
+			x = x.replace(/\>/g,"&gt");   // prevent user from typing html tags
+			x = x.replace(/\</g,"&lt");
+			x = x.replace(/\n/g,"<br>");
+			var currentdate = new Date(); 
+			var datetime = currentdate.getDate() + "/"
+							+ (currentdate.getMonth()+1)  + "/" 
+							+ currentdate.getFullYear() + " @ "  
+							+ currentdate.getHours() + ":"  
+							+ currentdate.getMinutes() + ":" 
+							+ currentdate.getSeconds();
+			var y;
+			if(typeof(Storage)!="undefined")
+			{
+				if(localStorage.temp>localStorage.count)
+				{
+					localStorage.count = Number(localStorage.temp);
+					y = Number(localStorage.count);
+				}
+				else
+				{
+					y = Number(localStorage.temp);
+				}
+
+				if(localStorage['news'+y])
+				{
+					localStorage['news'+y] = x;
+					localStorage['time'+y] = datetime;
+				}
+				else
+				{
+					localStorage['news'+y] = x;
+					localStorage['time'+y] = datetime;
+				}
+			}
+		  }				
+      function del()
+      {
+		  key1 = 'news' + localStorage.temp;
+		  key2 = 'time' + localStorage.temp;
+		  localStorage.removeItem(key1);
+		  localStorage.removeItem(key2);
+		  if(localStorage.count==localStorage.temp)
+		  	  localStorage.count = Number(localStorage.count)-1;  
+	  }
+	  
+	  function fill()
+	  {
+		  str = localStorage['news' + localStorage.temp];
+		  str = str.split('<br>').join('\n'); 
+		  str = str.split('&lt').join('<'); 
+		  str = str.split('&gt').join('>'); 
+		  textarea = document.getElementById("note");
+		  if(localStorage.temp!=0)
+			textarea.value = str;
+	  }
+      
+      </script>
+      
+    </head>
+
+	<body onload="fill()">
+		
+		<h1 class="uk-article-title">Knotes</h1>
+		
+			<form action="index.html">
+			<textarea id="note" rows="12"></textarea>
+			
+	<br><br>
+		
+		<button type="submit" class="uk-button uk-button-tiny" onclick="add()">Add/Edit</button>
+		<button type="submit" class="uk-button uk-button-tiny">Cancel</button>
+		<button type="submit" class="uk-button uk-button-tiny uk-button-danger" onclick="del()">Delete</button>
+	</form>
+	</body>
